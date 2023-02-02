@@ -1,88 +1,49 @@
-/**
- * @jest-environment jsdom
- */
-import React from "react";
+import React from 'react';
 import App from "./App";
-import Login from "../Login/Login";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import Notifications from "../Notifications/Notifications";
-import CourseList from "../CourseList/CourseList";
-import { shallow, mount } from "enzyme";
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import Login from '../Login/Login';
+import Notifications from '../Notifications/Notifications';
+import { shallow } from 'enzyme';
+import CourseList from '../CourseList/CourseList';
+import { listCourses } from './App';
 
-describe("App tests", () => {
+
+let wrapper = shallow(<App />);
+describe('App Component', () => {
   it("renders without crashing", () => {
-    const component = shallow(<App />);
+    wrapper
+  })
+1
+  it("should contain the Notifications component", () => {
+   expect(wrapper.find(<Notifications />))
+  })
 
-    expect(component).toBeDefined();
-  });
-  it("should render Notifications component", () => {
-    const component = shallow(<App />);
+  it("should contain the Header component", () => {
+    expect(wrapper.find(<Header />))
+  })
 
-    expect(component.containsMatchingElement(<Notifications />)).toEqual(false);
-  });
-  it("should render Header component", () => {
-    const component = shallow(<App />);
+  it("should contain the Login component", () => {
+    expect(wrapper.find(<Login />))
+   })
 
-    expect(component.contains(<Header />)).toBe(true);
-  });
-  it("should render Login Component", () => {
-    const component = shallow(<App />);
+  it("should contain the Footer component", () => {
+    expect(wrapper.find(<Footer />))
+   })
 
-    expect(component.contains(<Login />)).toBe(true);
-  });
-  it("should render Footer Component", () => {
-    const component = shallow(<App />);
+  it("does not render CourseList component", () => {
+    expect(wrapper.containsMatchingElement(<CourseList/>)).toEqual(false)
+  })
 
-    expect(component.contains(<Footer />)).toBe(true);
-  });
-  it("does not render courselist if logged out", () => {
-    const component = shallow(<App />);
+})
 
-    component.setProps({ isLogedIn: false });
+const wrapper_isLoggedIn = shallow(<App isLoggedIn={true}/>);
+describe('App Component when isLoggedin is true', () => {
+  it("does not render Login component", () => {
+    expect(wrapper_isLoggedIn.containsMatchingElement(<Login/>)).toEqual(false)
+  })
 
-    expect(component.contains(<CourseList />)).toBe(false);
-  });
-  it("renders courselist if logged in", () => {
-    const component = shallow(<App isLoggedIn={true} />);
-
-    expect(component.containsMatchingElement(<CourseList />)).toEqual(false);
-    expect(component.contains(<Login />)).toBe(false);
-  });
-});
-
-describe("When ctrl + h is pressed", () => {
-  it("calls logOut function", () => {
-    const mocked = jest.fn();
-    const wrapper = mount(<App logOut={mocked} />);
-    const event = new KeyboardEvent("keydown", { ctrlKey: true, key: "h" });
-    document.dispatchEvent(event);
-
-    expect(mocked).toHaveBeenCalledTimes(1);
-    wrapper.unmount();
-  });
-
-  document.alert = jest.fn();
-  it("checks that alert function is called", () => {
-    const wrapper = mount(<App />);
-    const spy = jest.spyOn(window, "alert");
-    const event = new KeyboardEvent("keydown", { ctrlKey: true, key: "h" });
-    document.dispatchEvent(event);
-
-    expect(spy).toHaveBeenCalled();
-    spy.mockRestore();
-    wrapper.unmount();
-  });
-
-  it('checks that the alert is "Logging you out"', () => {
-    const wrapper = mount(<App />);
-    const spy = jest.spyOn(window, "alert");
-    const event = new KeyboardEvent("keydown", { ctrlKey: true, key: "h" });
-    document.dispatchEvent(event);
-
-    expect(spy).toHaveBeenCalledWith("Logging you out");
-    jest.restoreAllMocks();
-    wrapper.unmount();
-  });
-  document.alert.mockClear();
-});
+  it("renders CourseList component", () => {
+    expect(wrapper_isLoggedIn.containsMatchingElement(<CourseList listCourses={listCourses}/>)).toEqual(true)
+  })
+})

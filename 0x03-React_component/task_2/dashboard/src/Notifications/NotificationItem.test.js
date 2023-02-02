@@ -1,38 +1,30 @@
-import React from "react";
-import NotificationItem from "./NotificationItem";
-import { shallow } from "enzyme";
+import React from 'react';
+import NotificationItem from './NotificationItem';
+import { shallow } from 'enzyme';
 
-describe("rendering components", () => {
-  it("renders NotificationItem component without crashing", () => {
-    const wrapper = shallow(<NotificationItem />);
 
-    expect(wrapper.exists()).toBe(true);
-  });
+describe('NotificationItem component', () => {
+  it('renders without crashing',() => {
+    shallow(<NotificationItem/>);
+  })
 
-  it('renders correct html from type="default" value="test" props', () => {
-    const wrapper = shallow(<NotificationItem />);
+  it('renders the correct html (with given dummy  type and value props)', () => {
+    const wrapper = shallow(<NotificationItem type="urgent" value="test"/>);
+    const html = wrapper.html()
+    // console.log(wrapper.html());
+    expect(html).toBe('<li data-notification-type="urgent">test</li>')
+  })
 
-    wrapper.setProps({ type: "default", value: "test" });
-    expect(wrapper.html()).toEqual('<li data-notification-type="default">test</li>');
-  });
+  it('renders the correct html (with given dummy html props)', () => {
+    const wrapper = shallow(<NotificationItem html={{ __html: '<u>test</u>' }} />);
+    const html = wrapper.html()
+    expect(html).toBe('<li data-notification-type="default"><u>test</u></li>')
+  })
 
-  it('renders correct html from  html="<u>test</u>" props', () => {
-    const wrapper = shallow(<NotificationItem />);
-
-    wrapper.setProps({ html: "<u>test</u>" });
-    expect(wrapper.html()).toEqual('<li data-urgent="true"><u>test</u></li>');
-  });
-});
-
-describe("onclick event behaves as it should", () => {
-  it("should call console.log", () => {
-    const wrapper = shallow(<NotificationItem />);
-    const spy = jest.fn();
-
-    wrapper.setProps({ value: "test item", markAsRead: spy, id: 1 });
-    wrapper.find("li").props().onClick();
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith(1);
-    spy.mockRestore();
-  });
-});
+  it('spys markAsRead', () => {
+    const markAsReadMock = jest.fn((id) => `Notification ${id} has been marked as read`)
+    const wrapper = shallow(<NotificationItem html={{ __html: '<u>test</u>' }} id={1} markAsRead={markAsReadMock} />);
+    wrapper.simulate('click')
+    expect(markAsReadMock).toHaveBeenCalledWith(1);
+  })
+})
