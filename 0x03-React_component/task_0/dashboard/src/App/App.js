@@ -1,59 +1,48 @@
-import React from 'react';
-import './App.css';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import Login from '../Login/Login';
-import Notifications from '../Notifications/Notifications';
-import CourseList from '../CourseList/CourseList';
-
-
-export const listCourses = [
-  {id: 1, name: 'ES6', credit: 60},
-  {id: 2, name: 'Webpack', credit: 20},
-  {id: 3, name: 'React', credit: 40}
-]
-
-export const listNotifications = [
-  {id: 1, type:"default", value: "New course available", html:{__html:null}},
-  {id: 2, type:"urgent", html:{__html:"Object Oriented Programming intro"}},
-  {id: 3, type:"default", value: "Present Javascript project requirements test on Friday"}
-]
+import React from "react";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import Login from "../Login/Login";
+import CourseList from "../CourseList/CourseList";
+import Notifications from "../Notifications/Notifications";
+import "./App.css";
+import PropTypes from "prop-types";
+import { getLatestNotification } from "../utils/utils";
 
 class App extends React.Component {
-  static defaultProps = {
-    isLoggedIn: false
-  }
+  listCourses = [
+    { id: 1, name: "ES6", credit: 60 },
+    { id: 2, name: "Webpack", credit: 20 },
+    { id: 3, name: "React", credit: 40 },
+  ];
 
-  render () {
-    const LoginStatus = () => {
-      if (this.props.isLoggedIn) {
-        console.log(listCourses)
-        return <CourseList listCourses={listCourses}/>
-      } else {
-        return (
-          <div className="App-body"><p>Login to access the full dashboard</p>
-            <Login/>
+  listNotifications = [
+    { id: 1, type: "default", value: "New course available" },
+    { id: 2, type: "urgent", value: "New resume available" },
+    { id: 3, type: "urgent", html: getLatestNotification() },
+  ];
+
+  render() {
+    return (
+      <React.Fragment>
+        <div className="App">
+          <div className="heading-section">
+            <Notifications listNotifications={this.listNotifications} />
+            <Header />
           </div>
-        )
-    }
-  }
-  return (
-    <>
-      <Notifications listNotifications={listNotifications}/>
-      <div className="App-header">
-        <Header/>
-      </div>
-      {LoginStatus()}
-      <div className="App-footer">
-        <Footer />
-      </div>
-    </>
-
-  );
+          {this.props.isLoggedIn ? <CourseList listCourses={this.listCourses} /> : <Login />}
+          <Footer />
+        </div>
+      </React.Fragment>
+    );
   }
 }
 
-// App.defaultProps = {isLoggedIn: false}
+App.defaultProps = {
+  isLoggedIn: false,
+};
+
+App.propTypes = {
+  isLoggedIn: PropTypes.bool,
+};
 
 export default App;
-
