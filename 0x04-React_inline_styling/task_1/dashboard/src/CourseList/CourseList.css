@@ -1,10 +1,17 @@
+:root {
+  --border-table-color: rgb(170, 170, 170);
+}
 th {
-    border-bottom: 1px solid gray;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+  border-top: 1px solid var(--border-table-color);
+  border-bottom: 1px solid var(--border-table-color);
+  text-align: left;
+  font-size: 18px;
+}
+
+th[colspan="2"] {
+  text-align: center;
 }
 
 td {
-    padding-left: 3px;
+  text-align: left;
 }

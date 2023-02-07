@@ -1,31 +1,31 @@
+:root {
+  --main-color: #e01d3f;
+}
+
 .menuItem {
-    position: absolute;
-    top: 7px;
-    right: 7px;
+  text-align: right;
 }
 
 .Notifications {
-	border: 3px dotted var(--holberton-red);
-	padding: 6px 12px;
-    position: absolute;
-    top: 21px;
-    right: 7px;
-	margin-top: 12px;
-    z-index: 100;
+  float: right;
+  border: 3px dashed var(--main-color);
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
-li[data-priority="default"] {
-	color: blue;
+.Notifications button img {
+  width: 10px;
 }
 
-li[data-priority="urgent"] {
-	color: var(--holberton-red);
+.Notifications p {
+  margin: 0;
+  margin-top: 15px;
 }
 
-li[data-notification-type="default"] {
-	color: blue;
+[data-notification-type="default"] {
+  color: blue;
 }
 
-li[data-notification-type="urgent"] {
-	color: var(--holberton-red);
+[data-notification-type="urgent"] {
+  color: red;
 }

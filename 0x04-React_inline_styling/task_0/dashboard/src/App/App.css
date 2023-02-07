@@ -1,18 +1,12 @@
 :root {
-    --holberton-red: #e1484c;
-}
-
-body {
-    max-width: 90%;
-    margin: 0 auto;
-    position: relative;
-}
-
-div {
-    padding: 2px 8px;
+  --main-color: #e01d3f;
 }
 
 .App {
-    position: relative;
-    min-height: 100vh;
+  border-bottom: 3px solid var(--main-color);
+}
+
+.App-body {
+  display: flex;
+  justify-content: center;
 }

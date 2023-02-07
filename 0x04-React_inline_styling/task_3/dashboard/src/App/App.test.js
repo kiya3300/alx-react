@@ -1,74 +1,69 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { jest } from '@jest/globals';
-import App from './App';
-import { StyleSheetTestUtils } from 'aphrodite';
+import { shallow, mount } from "enzyme";
+import React from "react";
+import App from "./App";
+import { StyleSheetTestUtils } from "aphrodite";
 
-describe('Test App.js', () => {
-  let wrapper;
-
-  beforeEach(() => {
+describe("<App />", () => {
+  beforeAll(() => {
     StyleSheetTestUtils.suppressStyleInjection();
-    wrapper = shallow(<App />);
+  });
+  afterAll(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('Renders App without crashing', () => {
-    expect(wrapper.exists());
+  it("App renders without crashing", () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.exists()).toEqual(true);
   });
-
-  it('App component contains Notifications component', () => {
+  it("should contain the Notifications component", () => {
+    const wrapper = shallow(<App />);
+    wrapper.update();
     expect(wrapper.find("Notifications")).toHaveLength(1);
   });
-
-  it('App component contains Header component', () => {
+  it("should contain the Header component", () => {
+    const wrapper = shallow(<App />);
+    wrapper.update();
     expect(wrapper.find("Header")).toHaveLength(1);
   });
-
-  it('App component contains Login component', () => {
+  it("should contain the Login component", () => {
+    const wrapper = shallow(<App />);
+    wrapper.update();
     expect(wrapper.find("Login")).toHaveLength(1);
   });
-
-  it('App component contains Footer component', () => {
+  it("should contain the Footer component", () => {
+    const wrapper = shallow(<App />);
+    wrapper.update();
     expect(wrapper.find("Footer")).toHaveLength(1);
   });
-
-  it('test to check that CourseList is not displayed inside App', () => {
+  it("CourseList is not displayed with isLoggedIn false by default", () => {
+    const wrapper = shallow(<App />);
+    wrapper.update();
     expect(wrapper.find("CourseList")).toHaveLength(0);
   });
-});
-
-describe("Testing <App isLoggedIn={true} />", () => {
-  let wrapper;
-
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-    wrapper = shallow(<App isLoggedIn={true}/>);
+  it("isLoggedIn is true", () => {
+    const wrapper = shallow(<App isLoggedIn />);
+    wrapper.update();
+    expect(wrapper.find("Login")).toHaveLength(0);
+    expect(wrapper.find("CourseList")).toHaveLength(1);
   });
 
-  it("the Login component is not included", () => {
-    expect(wrapper.find('Login')).toHaveLength(0);
-  });
+  it("when the keys control and h are pressed the logOut function, passed as a prop, is called and the alert function is called with the string Logging you out", () => {
+    const events = {};
+    const logout = jest.fn();
 
-  it("the CourseList component is included", () => {
-    expect(wrapper.find('CourseList').exists());
-  });
-});
+    document.addEventListener = jest.fn((event, cb) => {
+      events[event] = cb;
+    });
 
-describe("Testing <App logOut={function} />", () => {
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
-
-  it("verify that when the keys control and h are pressed the logOut function, passed as a prop, is called and the alert function is called with the string Logging you out", () => {
-    const wrapper = mount(<App logOut={()=>{console.log("ctrl and h are pressed")}}/>);
     window.alert = jest.fn();
-    const inst = wrapper.instance();
-    const logout = jest.spyOn(inst, 'logOut');
-    const alert = jest.spyOn(window, 'alert');
-    const event = new KeyboardEvent('keydown', {bubbles:true, ctrlKey: true, key: 'h'});
-    document.dispatchEvent(event);
-    expect(alert).toBeCalledWith("Logging you out");
-    expect(logout).toBeCalled();
-    alert.mockRestore();
+
+    shallow(<App logOut={logout} />);
+
+    events.keydown({ key: "h", ctrlKey: true });
+
+    expect(window.alert).toHaveBeenCalledWith("Logging you out");
+    expect(logout).toHaveBeenCalled();
+
+    jest.restoreAllMocks();
   });
 });
