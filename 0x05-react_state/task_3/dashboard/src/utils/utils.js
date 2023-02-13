@@ -1,5 +1,19 @@
-export const getFullYear = () => new Date().getFullYear();
+export function getFullYear() {
+  return new Date().getFullYear();
+}
 
-export const getFooterCopy = (isIndex) => (isIndex ? "Holberton School" : "Holberton School main dashboard");
+export function getFooterCopy(isIndex) {
+  let msg;
 
-export const getLatestNotification = () => "<strong>Urgent Requirement</strong> - complete by EOD";
+  if (isIndex) {
+    msg = "Holberton School";
+  } else {
+    msg = "Holberton School main dashboard";
+  }
+
+  return msg;
+}
+
+export function getLatestNotification() {
+  return "<strong>Urgent requirement</strong> - complete by EOD";
+}

@@ -1,24 +1,25 @@
-import React, { useContext } from "react";
-import "./Footer.css";
+import React from "react";
 import { getFullYear, getFooterCopy } from "../utils/utils";
 import { AppContext } from "../App/AppContext";
+import { user, logOut } from '../App/AppContext'
 
 function Footer() {
-  const { user } = useContext(AppContext);
-
   return (
-    <>
-      <div className="App-footer">
-        {user.isLoggedIn && (
+    <AppContext.Consumer>
+      {({ user, logOut }) => (
+        <div className="footer">
           <p>
-            <a href="#">Contact us</a>
+            Copyright {getFullYear()} - {getFooterCopy(true)}
           </p>
-        )}
-        <p>
-          Copyright {getFullYear()} - {getFooterCopy()}
-        </p>
-      </div>
-    </>
+          {
+            user.isLoggedIn && <p>Contact us</p>
+          }
+        </div>
+
+      )}
+
+    </AppContext.Consumer>
+
   );
 }
 
